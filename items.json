@@ -1,0 +1,12 @@
+[
+    {"id": 1, "name": "Organic Honeycrisp Apple", "brand": "PRODUCE", "department": "Produce", "upc": "123456789012", "image": "/imgs/org honeycrisp apple.jpg"},
+    {"id": 2, "name": "Medium Hass Avocado", "brand": "PRODUCE", "department": "Produce", "upc": "234567890123", "image": "imgs/avocado.jpg"},
+    {"id": 3, "name": "Ground Beef 85% Lean 15% Fat", "brand": "MEAT", "department": "Meat", "upc": "345678901234", "image": "imgs/ground beef.jpg"},
+    {"id": 4, "name": "Atlantic Salmon Portion", "brand": "SEAFOOD", "department": "Seafood", "upc": "456789012345", "image": "imgs/portion atl.jpg"},
+    {"id": 5, "name": "Organic Cocoa Powder", "brand": "365 by Whole Foods Market", "department": "Grocery", "upc": "567890123456", "image": "imgs/cocoa powder.jpg"},
+    {"id": 6, "name": "Tortilla Chips - Lime, 5 oz", "brand": "Siete", "department": "Grocery", "upc": "678901234567", "image": "imgs/tortilla lime siete.jpeg"},
+    {"id": 7, "name": "Grated Parmigiano Reggiano", "brand": "Mitica", "department": "Dairy and Eggs", "upc": "789012345678", "image": "imgs/mitica parmigiano grated.jpg"},
+    {"id": 8, "name": "Growing Years Milk with DHA Omega-3, 59 fl oz Carton", "brand": "Horizon Organic", "department": "Dairy and Eggs", "upc": "890123456789", "image": "imgs/growing years milk.jpeg"},
+    {"id": 9, "name": "Wild-Caught Cod Fillets", "brand": "365 by Whole Foods Market", "department": "Seafood", "upc": "901234567890", "image": "imgs/frozen cod.jpg"},
+    {"id": 10, "name": "Eucalyptus Essential Oil, 1 each", "brand": "Whole Foods Market", "department": "Body Care", "upc": "012345678901", "image": "imgs/eucalyptus.jpg"}
+]

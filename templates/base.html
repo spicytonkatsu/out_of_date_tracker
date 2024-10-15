@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #EFF5FA; /* Grayish blue */
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px; /* Sidebar width */
+            background-color: #0E1F2F; /* Rich black */
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers icons horizontally */
+        }
+        
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;  /* Reduced clickable area width */
+            height: 50px; /* Reduced clickable area height */
+            margin-bottom: 20px;
+            border-radius: 15px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        
+        .sidebar a:hover {
+            background-color: #AD560B; /* Hover effect background */
+        }
+        
+        .sidebar a.active {
+            background-color: #F2882C; /* Active state background */
+        }
+        
+        .sidebar img {
+            width: 30px; /* Adjust icon size */
+            height: 30px;
+        }
+
+        .content {
+            margin-left: 80px; 
+            padding: 20px;
+        }
+
+        .profile-area {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            color: #F2882C;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="{{ url_for('dashboard') }}" class="{% if request.path == url_for('dashboard') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='home.svg') }}" alt="Dashboard">
+        </a>
+        <a href="{{ url_for('add_item') }}" class="{% if request.path == url_for('add_item') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='plus.svg') }}" alt="Add Item">
+        </a>
+        <a href="{{ url_for('calendar') }}" class="{% if request.path == url_for('calendar') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='calendar.svg') }}" alt="Calendar">
+        </a>
+        <a href="{{ url_for('bell') }}" class="{% if request.path == url_for('bell') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='bell.svg') }}" alt="Bell">
+        </a>
+        <a href="{{ url_for('settings') }}" class="{% if request.path == url_for('settings') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='settings.svg') }}" alt="Settings">
+        </a>
+        <a href="{{ url_for('logout') }}" class="text-danger">
+            <img src="{{ url_for('static', filename='log-out.svg') }}" alt="Logout">
+        </a>
+    </div>
+
+    <div class="content">
+        {% block content %}Hello, {{ current_user.first_name }}!{% endblock %}
+        <div class="profile-area">
+            <h2 class="welcome-message">{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+            <img src="{{ url_for('static', filename='user.svg') }}" alt="Profile Picture" style="width: 50px; border-radius: 50%;">
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

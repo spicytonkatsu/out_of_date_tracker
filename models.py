@@ -34,8 +34,8 @@ class User(db.Model): # defines a User class that inherits from db.Model, each i
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
+    name = db.Column(db.String(500), nullable=False)
+    brand = db.Column(db.String(150), nullable=False)
     department = db.Column(db.String(150), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     upc = db.Column(db.String(12), unique=True, nullable=False)

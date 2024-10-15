@@ -1,10 +1,92 @@
-<form method="POST">
-    <input type="text" name="name" placeholder="Item Name" required>
-    <textarea name="description" placeholder="Description" required></textarea>
-    <input type="text" name="department" placeholder="Department" required>
-    <input type="text" name="upc" placeholder="UPC" required>
-    <input type="text" name="image" placeholder="Image URL">
-    <label for="display_duration">Display Duration (days):</label>
-    <input type="number" name="display_duration" id="display_duration" required>
-    <button type="submit">Add Item</button>
-</form>
+{% extends "base.html" %}
+
+{% block title %}Add an Item{% endblock %}
+
+{% block content %}
+<style>
+    .search-container {
+        display: flex;
+        align-items: center;
+        background-color: #f0f0f0; /* Background color for the rectangle */
+        border: 1px solid #ccc; /* Border around the rectangle */
+        border-radius: 5px; /* Rounded corners */
+        padding: 10px; /* Padding inside the rectangle */
+    }
+
+    .icon {
+        width: 24px; /* Size of the icon */
+        height: 24px; /* Size of the icon */
+        margin-right: 8px; /* Space between icon and text */
+    }
+
+    .search-text {
+        margin-right: 8px; /* Space between text and input */
+        font-weight: bold; /* Bold text for emphasis */
+    }
+
+    #search {
+        border: none; /* Remove default border */
+        outline: none; /* Remove outline */
+        flex-grow: 1; /* Allow input to take available space */
+        padding: 5px; /* Padding inside the input */
+    }
+</style>
+
+<div class="content">
+    <h1>Add an Item</h1>
+    
+    <div class="input-group">
+        <div class="search-container">
+            <img src="{{ url_for('static', filename='search.svg') }}" alt="Search" class="icon">
+            <span class="search-text">Search</span>
+            <input type="text" id="search" placeholder="Search or lookup by name">
+        </div>
+    </div>
+    
+    <div id="item-list"></div>
+    
+    <form id="item-form" method="POST" style="display:none;">
+        <input type="hidden" name="name" id="item-name">
+        <input type="hidden" name="description" id="item-description">
+        <input type="hidden" name="department" id="item-department">
+        <input type="hidden" name="upc" id="item-upc">
+        <input type="hidden" name="image" id="item-image">
+        <label for="display_duration">Display Duration (days):</label>
+        <input type="number" name="display_duration" id="display_duration" required>
+        <button type="submit">Add Item</button>
+    </form>
+</div>
+
+{% endblock %} <!-- Ensure this is inside the content block -->
+
+<script>
+    document.getElementById('search').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        fetch('/items')
+            .then(response => response.json())
+            .then(data => {
+                const filteredItems = data.filter(item => item.department.toLowerCase().includes(query));
+                displayItems(filteredItems);
+            });
+    });
+
+    function displayItems(items) {
+        const itemList = document.getElementById('item-list');
+        itemList.innerHTML = ''; // Clear previous results
+
+        items.forEach(item => {
+            const div = document.createElement('div');
+            div.textContent = item.name + ' - ' + item.department;
+            div.onclick = () => {
+                document.getElementById('item-name').value = item.name;
+                document.getElementById('item-description').value = item.description;
+                document.getElementById('item-department').value = item.department;
+                document.getElementById('item-upc').value = item.upc;
+                document.getElementById('item-image').value = item.image;
+                document.getElementById('item-form').style.display = 'block';
+                itemList.innerHTML = ''; // Clear the list after selection
+            };
+            itemList.appendChild(div);
+        });
+    }
+</script>
