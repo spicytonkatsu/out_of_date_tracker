@@ -1,14 +1,16 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from models import db, User
+from models import db, User, Item
+from datetime import datetime, timedelta
 
 app = Flask(__name__) # initializes flask
-app.config['SECRET_KEY'] = 'fuyergweyugbwer67f4trgfuyrgfey'
+app.config['SECRET_KEY'] = 'sfgvsbfdvjhbsryjrgjvsbjhfd'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db' # points to an SQLite database called users.db
 db.init_app(app) # connects sqlalchemy instance to flask
 
 login_manager = LoginManager() 
 login_manager.init_app(app) # connects loginManager to flask
+login_manager.login_view = 'login'
 
 @login_manager.user_loader # decorator
 def load_user(user_id):
@@ -17,6 +19,21 @@ def load_user(user_id):
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/calendar')
+@login_required
+def calendar():
+    return render_template('calendar.html', message='This is the Calendar page.')
+
+@app.route('/bell')
+@login_required
+def bell():
+    return render_template('bell.html', message='This is the Notifications page.')
+
+@app.route('/settings')
+@login_required
+def settings():
+    return render_template('settings.html', message='This is the Settings page.')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -51,12 +68,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-
+        
         if user and user.check_password(password): # finds the user and checks if password matches
             login_user(user) # logs in
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid username or password.') # error if invalid
+            flash('Invalid username or password.')
+            print("Invalid login attempt for username:", username)  # Debugging output
     return render_template('login.html')
 
 @app.route('/logout') # logout endpoint
@@ -68,7 +86,72 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    #items = Item.query.filter_by(user_id=current_user.id).all()
+    #return render_template('dashboard.html', items=items)
     return render_template('dashboard.html')
+
+# adding, editing, deleting operations
+
+@app.route('/add_item', methods=['GET', 'POST'])
+@login_required
+def add_item():
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        department = request.form['department']
+        upc = request.form['upc']
+        image = request.form['image']
+        display_duration = int(request.form['display_duration'])
+
+        expiry_date = datetime.now() + timedelta(days=display_duration)
+
+        new_item = Item(
+            name=name, 
+            description=description, 
+            department=department, 
+            upc=upc, 
+            image=image, 
+            user_id=current_user.id,
+            display_duration=display_duration,
+            expiry_date=expiry_date
+        )
+        db.session.add(new_item)
+        db.session.commit()
+
+        flash('Item added successfully!')
+        return redirect(url_for('dashboard'))
+    
+    return render_template('add_item.html')
+
+@app.route('/edit_item/<int:item_id>', methods=['GET', 'POST'])
+@login_required
+def edit_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if request.method == 'POST':
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.department = request.form['department']
+        item.upc = request.form['upc']
+        item.image = request.form['image']
+        item.display_duration = int(request.form['display_duration'])  # Update display duration
+
+        item.expiry_date = datetime.now() + timedelta(days=item.display_duration)
+
+        db.session.commit()
+        flash('Item updated successfully!')
+        return redirect(url_for('dashboard'))
+
+    return render_template('edit_item.html', item=item)
+
+@app.route('/delete_item/<int:item_id>', methods=['POST'])
+@login_required
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Item deleted successfully!')
+    return redirect(url_for('dashboard'))
+
 
 if __name__ == '__main__':
     with app.app_context():

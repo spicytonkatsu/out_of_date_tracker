@@ -28,5 +28,20 @@ class User(db.Model): # defines a User class that inherits from db.Model, each i
 
     def set_password(self, password): # defines a method that takes password as an argument
         self.password_hash = generate_password_hash(password) # hashes the plaintext password and stores it in password.hash
+        
     def check_password(self, password):
         return check_password_hash(self.password_hash, password) # compares the stored hash with the provided password and returns a boolean
+
+class Item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
+    department = db.Column(db.String(150), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    upc = db.Column(db.String(12), unique=True, nullable=False)
+    image = db.Column(db.String(256)) # path to image
+    display_duration = db.Column(db.Integer, nullable=False)
+    expiry_date = db.Column(db.Date, nullable=False)
+
+    user = db.relationship('User', backref='items') # relationship with User, stores the id of the user who put the items out
+

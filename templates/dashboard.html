@@ -7,25 +7,100 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #EFF5FA; /* Changed to grayish blue */
         }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px; /* Adjusted width for a narrower sidebar */
+            background-color: #0E1F2F; /* Rich black */
+            padding-top: 20px;
+        }
+
+        .sidebar img {
+            display: block;
+            margin: 0 auto 40px; /* Center the icons and add space between them */
+            width: 30px; /* Adjust icon size as needed */
+            height: 30px; /* Maintain aspect ratio */
+        }
+
+        .sidebar a {
+            text-align: center; /* Center the icons */
+            text-decoration: none; /* No text decoration */
+        }
+
+        .sidebar a:hover {
+            background-color: #AD560B; /* Change background on hover */
+        }
+
+        .content {
+            margin-left: 80px; /* Adjust based on sidebar width */
+            padding: 20px;
+        }
+
         .welcome-message {
             opacity: 0;
             transform: translateY(-20px);
             animation: fadeIn 1s forwards;
+            margin-right: 50px;
         }
+
         @keyframes fadeIn {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
+        .profile-area {
+            position: absolute;
+            top: 20px;
+            right: 30px; 
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center vertically */
+        }
+
+        .icon {
+            color: #F2882C; /* Set this to your desired icon color */
+        }
+
+
     </style>
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100">
-    <div class="text-center">
-        <h1 class="welcome-message">Hello, {{ current_user.first_name }}! Welcome to Nemo!</h1>
-        <a href="{{ url_for('logout') }}" class="btn btn-danger mt-4">Logout</a>
+<body>
+
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='anchor.svg') }}" alt="Logo" class="icon">
+        <a href="{{ url_for('dashboard') }}">
+            <img src="{{ url_for('static', filename='home.svg') }}" alt="Dashboard" class="icon"> 
+        </a>
+        <a href="{{ url_for('add_item') }}">
+            <img src="{{ url_for('static', filename='plus.svg') }}" alt="Add Item" class="icon"> 
+        </a>
+        <a href="{{ url_for('calendar') }}">
+            <img src="{{ url_for('static', filename='calendar.svg') }}" alt="Calendar" class="icon"> 
+        </a>
+        <a href="{{ url_for('bell') }}">
+            <img src="{{ url_for('static', filename='bell.svg') }}" alt="Bell" class="icon"> 
+        </a>
+        <a href="{{ url_for('settings') }}">
+            <img src="{{ url_for('static', filename='settings.svg') }}" alt="Settings" class="icon"> 
+        </a>
+        <a href="{{ url_for('logout') }}" class="text-danger">
+            <img src="{{ url_for('static', filename='log-out.svg') }}" alt="Logout" class="icon">
+        </a>
+    </div>
+    
+    <div class="content">
+        <div class="profile-area">
+            <h1 class="welcome-message">Hello, {{ current_user.first_name }}!</h1>
+            <img src="{{ url_for('static', filename='user.svg') }}" alt="Profile Picture" style="width: 50px; border-radius: 50%;">
+        </div>
+
+        <h2>Dashboard</h2>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
