@@ -3,8 +3,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from models import db, User
 
 app = Flask(__name__) # initializes flask
-app.config['SECRET_KEY'] = 'secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'my_database' # points to an SQLite database called users.db
+app.config['SECRET_KEY'] = 'fuyergweyugbwer67f4trgfuyrgfey'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db' # points to an SQLite database called users.db
 db.init_app(app) # connects sqlalchemy instance to flask
 
 login_manager = LoginManager() 
